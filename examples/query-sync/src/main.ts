@@ -144,25 +144,29 @@ const Model = S.Struct({
   dietListbox: Ui.Listbox.Model,
   periodListbox: Ui.Listbox.Model,
 })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const CompletedNavigateInternal = m('CompletedNavigateInternal')
-const CompletedLoadExternal = m('CompletedLoadExternal')
-const CompletedReplaceUrl = m('CompletedReplaceUrl')
-const ClickedLink = m('ClickedLink', { request: Runtime.UrlRequest })
-const ChangedUrl = m('ChangedUrl', { url: Url })
-const ChangedSearchInput = m('ChangedSearchInput', { value: S.String })
-const ClickedColumnHeader = m('ClickedColumnHeader', { column: SortColumn })
-const GotDietListboxMessage = m('GotDietListboxMessage', {
+export const CompletedNavigateInternal = m('CompletedNavigateInternal')
+export const CompletedLoadExternal = m('CompletedLoadExternal')
+export const CompletedReplaceUrl = m('CompletedReplaceUrl')
+export const ClickedLink = m('ClickedLink', { request: Runtime.UrlRequest })
+export const ChangedUrl = m('ChangedUrl', { url: Url })
+export const ChangedSearchInput = m('ChangedSearchInput', { value: S.String })
+export const ClickedColumnHeader = m('ClickedColumnHeader', {
+  column: SortColumn,
+})
+export const GotDietListboxMessage = m('GotDietListboxMessage', {
   message: Ui.Listbox.Message,
 })
-const GotPeriodListboxMessage = m('GotPeriodListboxMessage', {
+export const GotPeriodListboxMessage = m('GotPeriodListboxMessage', {
   message: Ui.Listbox.Message,
 })
-const SelectedDietFilter = m('SelectedDietFilter', { value: S.String })
-const SelectedPeriodFilter = m('SelectedPeriodFilter', { value: S.String })
+export const SelectedDietFilter = m('SelectedDietFilter', { value: S.String })
+export const SelectedPeriodFilter = m('SelectedPeriodFilter', {
+  value: S.String,
+})
 
 const Message = S.Union([
   CompletedNavigateInternal,
@@ -255,7 +259,7 @@ const selectionToParam = <A extends string>(
   )
 }
 
-const ReplaceFilters = Command.define(
+export const ReplaceFilters = Command.define(
   'ReplaceFilters',
   {
     search: S.Option(S.String),
@@ -283,7 +287,7 @@ const LoadExternal = Command.define(
 type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
 
-const update = (model: Model, message: Message): UpdateReturn =>
+export const update = (model: Model, message: Message): UpdateReturn =>
   M.value(message).pipe(
     withUpdateReturn,
     M.tagsExhaustive({
@@ -878,7 +882,7 @@ const routeTitle = (route: Model['route']): string =>
     M.orElse(() => 'Not Found — Dinosaur Explorer'),
   )
 
-const view = (model: Model): Document => {
+export const view = (model: Model): Document => {
   const routeContent = M.value(model.route).pipe(
     M.tagsExhaustive({
       Browse: route => browseView(model, route),

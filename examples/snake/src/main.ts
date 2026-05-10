@@ -34,15 +34,15 @@ const Model = S.Struct({
   points: S.Number,
   highScore: S.Number,
 })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const TickedClock = m('TickedClock')
-const PressedKey = m('PressedKey', { key: S.String })
-const PausedGame = m('PausedGame')
-const RestartedGame = m('RestartedGame')
-const GeneratedApplePosition = m('GeneratedApplePosition', {
+export const TickedClock = m('TickedClock')
+export const PressedKey = m('PressedKey', { key: S.String })
+export const PausedGame = m('PausedGame')
+export const RestartedGame = m('RestartedGame')
+export const GeneratedApplePosition = m('GeneratedApplePosition', {
   position: Position.Position,
 })
 
@@ -76,7 +76,7 @@ const init: Runtime.ProgramInit<Model, Message> = () => {
 
 // UPDATE
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -233,7 +233,7 @@ const update = (
 
 // COMMAND
 
-const GenerateApplePosition = Command.define(
+export const GenerateApplePosition = Command.define(
   'GenerateApplePosition',
   { snake: Snake.Snake },
   GeneratedApplePosition,
@@ -340,7 +340,7 @@ const instructionsView = (): Html =>
     ],
   )
 
-const view = (model: Model): Document => ({
+export const view = (model: Model): Document => ({
   title: `Snake — ${model.points} pts`,
   body: h.div(
     [

@@ -6,20 +6,20 @@ import { m } from 'foldkit/message'
 // MODEL
 
 const Model = S.Struct({ count: S.Number })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const ClickedDecrement = m('ClickedDecrement')
-const ClickedIncrement = m('ClickedIncrement')
-const ClickedReset = m('ClickedReset')
+export const ClickedDecrement = m('ClickedDecrement')
+export const ClickedIncrement = m('ClickedIncrement')
+export const ClickedReset = m('ClickedReset')
 
 const Message = S.Union([ClickedDecrement, ClickedIncrement, ClickedReset])
 type Message = typeof Message.Type
 
 // UPDATE
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -42,7 +42,7 @@ const init: Runtime.ProgramInit<Model, Message> = () => [{ count: 0 }, []]
 
 const h = html<Message>()
 
-const view = (model: Model): Document => ({
+export const view = (model: Model): Document => ({
   title: `Counter: ${model.count}`,
   body: h.div(
     [

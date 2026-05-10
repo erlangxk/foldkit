@@ -68,14 +68,14 @@ export type { Model }
 
 // MESSAGE
 
-const UpdatedName = m('UpdatedName', { value: S.String })
-const UpdatedEmail = m('UpdatedEmail', { value: S.String })
+export const UpdatedName = m('UpdatedName', { value: S.String })
+export const UpdatedEmail = m('UpdatedEmail', { value: S.String })
 export const ValidatedEmail = m('ValidatedEmail', {
   validationId: S.Number,
   field: Field,
 })
-const UpdatedMessage = m('UpdatedMessage', { value: S.String })
-const ClickedFormSubmit = m('ClickedFormSubmit')
+export const UpdatedMessage = m('UpdatedMessage', { value: S.String })
+export const ClickedFormSubmit = m('ClickedFormSubmit')
 export const SubmittedForm = m('SubmittedForm', {
   success: S.Boolean,
   name: S.String,

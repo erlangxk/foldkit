@@ -51,21 +51,21 @@ const Model = S.Struct({
   orderPlaced: S.Boolean,
   productsPage: Products.Model,
 })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const CompletedNavigateInternal = m('CompletedNavigateInternal')
-const CompletedLoadExternal = m('CompletedLoadExternal')
-const ClickedLink = m('ClickedLink', {
+export const CompletedNavigateInternal = m('CompletedNavigateInternal')
+export const CompletedLoadExternal = m('CompletedLoadExternal')
+export const ClickedLink = m('ClickedLink', {
   request: Runtime.UrlRequest,
 })
-const ChangedUrl = m('ChangedUrl', { url: Url })
-const GotProductsMessage = m('GotProductsMessage', {
+export const ChangedUrl = m('ChangedUrl', { url: Url })
+export const GotProductsMessage = m('GotProductsMessage', {
   message: Products.Message,
 })
-const ClickedAddToCart = m('ClickedAddToCart', { item: Item.Item })
-const ClickedQuantityChange = m('ClickedQuantityChange', {
+export const ClickedAddToCart = m('ClickedAddToCart', { item: Item.Item })
+export const ClickedQuantityChange = m('ClickedQuantityChange', {
   itemId: S.String,
   quantity: S.Number,
 })
@@ -129,7 +129,7 @@ const LoadExternal = Command.define(
 
 // UPDATE
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -351,7 +351,7 @@ const routeTitle = (route: Model['route']): string =>
     M.orElse(({ _tag }) => `${_tag} — Shopping Cart`),
   )
 
-const view = (model: Model): Document => {
+export const view = (model: Model): Document => {
   const routeContent = M.value(model.route).pipe(
     M.tagsExhaustive({
       Products: () => productsView(model),

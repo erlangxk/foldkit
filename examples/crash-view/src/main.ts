@@ -6,18 +6,18 @@ import { m } from 'foldkit/message'
 // MODEL
 
 const Model = Schema.Null
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const ClickedCrash = m('ClickedCrash')
+export const ClickedCrash = m('ClickedCrash')
 
 const Message = Schema.Union([ClickedCrash])
 export type Message = typeof Message.Type
 
 // UPDATE
 
-const update = (
+export const update = (
   _model: Model,
   _message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] => {
@@ -32,7 +32,7 @@ const init: Runtime.ProgramInit<Model, Message> = () => [null, []]
 
 const h = html<Message>()
 
-const view = (_model: Model): Document => ({
+export const view = (_model: Model): Document => ({
   title: 'Crash View Example',
   body: h.div(
     [h.Class('min-h-screen bg-white flex items-center justify-center')],

@@ -51,13 +51,13 @@ const Model = S.Struct({
   nextId: S.Number,
   isRunning: S.Boolean,
 })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const TickedFrame = m('TickedFrame', { deltaTime: S.Number })
-const ClickedCanvas = m('ClickedCanvas', { x: S.Number, y: S.Number })
-const SpawnedBall = m('SpawnedBall', {
+export const TickedFrame = m('TickedFrame', { deltaTime: S.Number })
+export const ClickedCanvas = m('ClickedCanvas', { x: S.Number, y: S.Number })
+export const SpawnedBall = m('SpawnedBall', {
   x: S.Number,
   y: S.Number,
   vx: S.Number,
@@ -65,8 +65,8 @@ const SpawnedBall = m('SpawnedBall', {
   radius: S.Number,
   color: S.String,
 })
-const ClickedClear = m('ClickedClear')
-const ClickedTogglePlay = m('ClickedTogglePlay')
+export const ClickedClear = m('ClickedClear')
+export const ClickedTogglePlay = m('ClickedTogglePlay')
 
 const Message = S.Union([
   TickedFrame,
@@ -86,7 +86,7 @@ const init: Runtime.ProgramInit<Model, Message> = () => [
 
 // COMMAND
 
-const SpawnBall = Command.define(
+export const SpawnBall = Command.define(
   'SpawnBall',
   { x: S.Number, y: S.Number },
   SpawnedBall,
@@ -135,7 +135,7 @@ const advanceBall =
     })
   }
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -241,7 +241,7 @@ const controlsView = (model: Model): Html =>
     ],
   )
 
-const view = (model: Model): Document => ({
+export const view = (model: Model): Document => ({
   title: `Canvas Art (${model.balls.length} balls)`,
   body: h.div(
     [

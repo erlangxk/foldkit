@@ -168,17 +168,17 @@ const Model = S.Struct({
   uiModel: UiModel,
 })
 
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const CompletedNavigateInternal = m('CompletedNavigateInternal')
-const CompletedLoadExternal = m('CompletedLoadExternal')
-const ClickedLink = m('ClickedLink', {
+export const CompletedNavigateInternal = m('CompletedNavigateInternal')
+export const CompletedLoadExternal = m('CompletedLoadExternal')
+export const ClickedLink = m('ClickedLink', {
   request: Runtime.UrlRequest,
 })
-const ChangedUrl = m('ChangedUrl', { url: Url })
-const GotUiMessage = m('GotUiMessage', {
+export const ChangedUrl = m('ChangedUrl', { url: Url })
+export const GotUiMessage = m('GotUiMessage', {
   message: UiMessage,
 })
 
@@ -243,7 +243,7 @@ const toUiMessage = (message: typeof UiMessage.Type): Message =>
 const toMobileMenuDialogMessage = (message: Ui.Dialog.Message): Message =>
   GotUiMessage({ message: GotMobileMenuDialogMessage({ message }) })
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -618,7 +618,7 @@ const routeTitle = (route: Model['route']): string =>
     M.orElse(({ _tag }) => `${_tag} — Foldkit UI Showcase`),
   )
 
-const view = (model: Model): Document => ({
+export const view = (model: Model): Document => ({
   title: routeTitle(model.route),
   body: h.div(
     [h.Class('flex flex-col md:flex-row min-h-screen bg-white')],

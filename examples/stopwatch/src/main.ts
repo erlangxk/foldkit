@@ -23,16 +23,20 @@ const Model = S.Struct({
   isRunning: S.Boolean,
   startTime: S.Number,
 })
-type Model = typeof Model.Type
+export type Model = typeof Model.Type
 
 // MESSAGE
 
-const ClickedStart = m('ClickedStart')
-const DeterminedStartTime = m('DeterminedStartTime', { startTime: S.Number })
-const ClickedStop = m('ClickedStop')
-const ClickedReset = m('ClickedReset')
-const Ticked = m('Ticked')
-const DeterminedTickTime = m('DeterminedTickTime', { elapsedMs: S.Number })
+export const ClickedStart = m('ClickedStart')
+export const DeterminedStartTime = m('DeterminedStartTime', {
+  startTime: S.Number,
+})
+export const ClickedStop = m('ClickedStop')
+export const ClickedReset = m('ClickedReset')
+export const Ticked = m('Ticked')
+export const DeterminedTickTime = m('DeterminedTickTime', {
+  elapsedMs: S.Number,
+})
 
 export const Message = S.Union([
   ClickedStart,
@@ -46,7 +50,7 @@ export type Message = typeof Message.Type
 
 // COMMAND
 
-const DetermineStartTime = Command.define(
+export const DetermineStartTime = Command.define(
   'DetermineStartTime',
   { elapsedMs: S.Number },
   DeterminedStartTime,
@@ -57,7 +61,7 @@ const DetermineStartTime = Command.define(
   }),
 )
 
-const DetermineTickTime = Command.define(
+export const DetermineTickTime = Command.define(
   'DetermineTickTime',
   { startTime: S.Number },
   DeterminedTickTime,
@@ -70,7 +74,7 @@ const DetermineTickTime = Command.define(
 
 // UPDATE
 
-const update = (
+export const update = (
   model: Model,
   message: Message,
 ): readonly [Model, ReadonlyArray<Command.Command<Message>>] =>
@@ -180,7 +184,7 @@ const formatTime = (ms: number): string => {
 
 const floorAndPad = flow(Math.floor, v => v.toString(), String.padStart(2, '0'))
 
-const view = (model: Model): Document => ({
+export const view = (model: Model): Document => ({
   title: `Stopwatch ${formatTime(model.elapsedMs)}`,
   body: h.div(
     [h.Class('min-h-screen bg-gray-200 flex items-center justify-center')],
