@@ -8,7 +8,7 @@ import {
   Option,
 } from 'effect'
 
-import { afterCommit } from '../render/render.js'
+import { afterCommit, afterPaint } from '../render/render.js'
 import { ElementNotFound } from './error.js'
 
 const BASE_DIALOG_Z_INDEX = 2147483600
@@ -219,6 +219,55 @@ export const scrollIntoView = (
     yield* afterCommit
     const element = yield* queryHTMLElement(selector)
     element.scrollIntoView({ block: 'nearest' })
+  })
+
+/**
+ * Scrolls to the element with the given id after the next paint, optionally
+ * moving keyboard focus to it.
+ *
+ * Use after a Message that changes which content is in the DOM, such as
+ * routing to a new page with a URL hash. The two-frame wait gives the
+ * runtime time to commit the new Model and the browser time to lay it out,
+ * so the target element exists and its position is settled before the
+ * scroll fires.
+ *
+ * Pass the id without a leading `#` (matching `Url.hash`, which strips the
+ * separator during parsing). To scroll to an arbitrary element by CSS
+ * selector, use `scrollIntoView`.
+ *
+ * When `moveFocus` is `true` (the default), the target is also made
+ * keyboard-focusable by adding `tabindex="-1"` if missing, then focused
+ * with `preventScroll: true`. This is the accessibility-correct behavior
+ * for in-page navigation: keyboard users continue tabbing from the section
+ * they landed in, and screen readers announce the new location. Pass
+ * `moveFocus: false` for a pure scroll.
+ *
+ * Fails with `ElementNotFound` if no element with the given id exists.
+ *
+ * @example
+ * ```typescript
+ * Dom.scrollToAnchor('animation-frames').pipe(Effect.ignore, Effect.as(CompletedScrollToAnchor()))
+ * Dom.scrollToAnchor('animation-frames', { moveFocus: false }).pipe(Effect.ignore, Effect.as(CompletedScrollToAnchor()))
+ * ```
+ */
+export const scrollToAnchor = (
+  hash: string,
+  options?: Readonly<{ moveFocus?: boolean }>,
+): Effect.Effect<void, ElementNotFound> =>
+  Effect.gen(function* () {
+    yield* afterPaint
+    const element = document.getElementById(hash)
+    if (element === null) {
+      return yield* Effect.fail(new ElementNotFound({ selector: `#${hash}` }))
+    }
+    element.scrollIntoView({ behavior: 'instant' })
+    const moveFocus = options?.moveFocus ?? true
+    if (moveFocus) {
+      if (!element.hasAttribute('tabindex')) {
+        element.setAttribute('tabindex', '-1')
+      }
+      element.focus({ preventScroll: true })
+    }
   })
 
 /** Direction for focus advancement: forward or backward in tab order. */

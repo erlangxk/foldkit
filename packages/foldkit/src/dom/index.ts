@@ -5,6 +5,7 @@ export {
   closeModal,
   focus,
   scrollIntoView,
+  scrollToAnchor,
   showModal,
 } from './dom.js'
 export type { FocusDirection } from './dom.js'

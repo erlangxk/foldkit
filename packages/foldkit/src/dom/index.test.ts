@@ -8,6 +8,7 @@ import {
   inertOthers,
   lockScroll,
   restoreInert,
+  scrollToAnchor,
   unlockScroll,
 } from './index.js'
 
@@ -17,6 +18,70 @@ describe('focus', () => {
       const error = yield* Effect.flip(focus('#nonexistent'))
       expect(error).toBeInstanceOf(ElementNotFound)
       expect(error.selector).toBe('#nonexistent')
+    }),
+  )
+})
+
+describe('scrollToAnchor', () => {
+  const buildAnchor = (id: string): HTMLElement => {
+    const section = document.createElement('section')
+    section.id = id
+    document.body.appendChild(section)
+    return section
+  }
+
+  const cleanupDom = () => {
+    document.body.innerHTML = ''
+  }
+
+  it.effect('fails with ElementNotFound when no element matches the id', () =>
+    Effect.gen(function* () {
+      const error = yield* Effect.flip(scrollToAnchor('missing-section'))
+      expect(error).toBeInstanceOf(ElementNotFound)
+      expect(error.selector).toBe('#missing-section')
+    }),
+  )
+
+  it.effect('adds tabindex="-1" and focuses the target by default', () =>
+    Effect.gen(function* () {
+      const section = buildAnchor('overview')
+
+      yield* scrollToAnchor('overview')
+
+      expect(section.getAttribute('tabindex')).toBe('-1')
+      expect(document.activeElement).toBe(section)
+
+      cleanupDom()
+    }),
+  )
+
+  it.effect('preserves an existing tabindex when moving focus', () =>
+    Effect.gen(function* () {
+      const section = buildAnchor('overview')
+      section.setAttribute('tabindex', '0')
+
+      yield* scrollToAnchor('overview')
+
+      expect(section.getAttribute('tabindex')).toBe('0')
+      expect(document.activeElement).toBe(section)
+
+      cleanupDom()
+    }),
+  )
+
+  it.effect('skips focus management when moveFocus is false', () =>
+    Effect.gen(function* () {
+      const section = buildAnchor('overview')
+      const sentinel = document.createElement('button')
+      document.body.appendChild(sentinel)
+      sentinel.focus()
+
+      yield* scrollToAnchor('overview', { moveFocus: false })
+
+      expect(section.hasAttribute('tabindex')).toBe(false)
+      expect(document.activeElement).toBe(sentinel)
+
+      cleanupDom()
     }),
   )
 })
